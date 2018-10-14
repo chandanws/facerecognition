@@ -2,38 +2,26 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt-nodejs');
 const cors = require('cors');
+const knex = require('knex');
+
+const postgres = knex({
+    client: 'mysql',
+    connection: {
+      host : '127.0.0.1',
+      user : 'root',
+      password : 'root',
+      database : 'facerecognition'
+    }
+  });
+
+  postgres.select('*').from('users').then(data => {
+      console.log(data);
+  });
 
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
-const db = {
-    users: [
-        {
-            id: '1',
-            name: 'pablo',
-            email: 'jhonwick@gmail.com',
-            password: 'hola',
-            entries: 0,
-            joindate: new Date()
-        },
-        {
-            id: '2',
-            name: 'sally',
-            email: 'sally@gmail.com',
-            entries: 0,
-            password: 'hola',
-            joindate: new Date()
-        }
-    ], 
-    login: [
-        {
-            id: '987',
-            hash: '',
-            email: 'sally@gmail.com'
-        }
-    ]
-}
 
 app.get('/', (req, res) => {
     res.send(db.users);
